@@ -1,10 +1,19 @@
-export async function exportToPdfUtil(htmlTemplate: string, templateData: Record<string, any>, docName?: string) {
+import { Cover } from "@/components/custom/masterContractTemplate";
 
-    const processedHtml = htmlTemplate.replace(
+interface Props {
+  htmlTemplate: string;
+  templateData: Record<string, any>;
+  docName?: string;
+  partnerType: "service" | "business",
+  // cover: Cover;
+}
+
+export async function exportToPdfUtil({htmlTemplate, templateData, docName, partnerType}: Props) {
+  const processedHtml = htmlTemplate.replace(
     /<!-- pagebreak -->/g,
-    '<div class="page-break"></div>'
+    '<div class="page-break"></div>',
   );
-   const styledHtml = `
+  const styledHtml = `
     <style>
       .page-break {
         page-break-before: always;
@@ -19,7 +28,7 @@ export async function exportToPdfUtil(htmlTemplate: string, templateData: Record
   const res = await fetch("/api/export-pdf", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ htmlTemplate, templateData }),
+    body: JSON.stringify({ htmlTemplate, templateData, partnerType }),
   });
 
   if (!res.ok) throw new Error("Failed to generate PDF");

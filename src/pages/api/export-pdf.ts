@@ -1,9 +1,9 @@
 // pages/api/export-pdf.ts
-import fs from "fs";
-import path from "path";
-import { generateMasterContractHTML } from "@/components/custom/masterContractTemplate";
 import { NextApiRequest, NextApiResponse } from "next";
 import puppeteer from "puppeteer";
+import { generateMasterContractHTML } from "@/components/custom/masterContractTemplate";
+import fs from "fs";
+import path from "path";
 
 function getPublicImage(filepath: string){
   const imagePath = path.join(process.cwd(), filepath);

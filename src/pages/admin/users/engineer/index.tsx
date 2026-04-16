@@ -332,9 +332,6 @@ function EngineerList(props: Props) {
         <Row gutter={15}>
           <Col xs={24} className="mb-[25px]">
             <div className="w-full h-fit flex justify-between items-center">
-              <Button type="primary" className="mb-3">
-                <Link href="/admin/users/partner/add">Add Partner</Link>
-              </Button>
               <div className="flex-1 flex gap-2 justify-end h-fit mb-2">
                 <div className="flex-1 max-w-lg flex gap-2 h-fit">
                   <Input.Search

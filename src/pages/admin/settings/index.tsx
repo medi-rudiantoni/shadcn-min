@@ -39,15 +39,15 @@ function GeneralSetting() {
       });
     }
   }, [token]);
-  const hanldePhone = (val: any) => {
-    setData({ ...data, enable_phone: val });
-    if (val) {
-      setData({ ...data, enable_sms: enableSms });
-      setData({ ...data, enable_whatsapp: enableWhatsapp });
-    } else {
-      setData({ ...data, enable_sms: val });
-      setData({ ...data, enable_whatsapp: val });
-    }
+  
+  const hanldePhone = (val: boolean) => {
+    setData((prev: any) => ({
+      ...prev,
+      enable_phone: val,
+      enable_sms: val ? prev.enable_sms : false,
+      enable_whatsapp: val ? prev.enable_whatsapp : false,
+    }));
+
     setEnablePhone(val);
   };
   const handleSave = () => {

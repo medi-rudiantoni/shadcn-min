@@ -36,3 +36,14 @@ export const updateTicket = async (authtoken, id, data) => {
     }
   );
 };
+export const deleteTicket = async (authtoken, id) => {
+  return await axios.delete(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/ticket/delete/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${authtoken}`,
+        "Content-type": "application/json",
+      },
+    }
+  );
+};

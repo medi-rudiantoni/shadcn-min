@@ -17,7 +17,7 @@ import { Bounce, toast } from "react-toastify";
 import moment from "moment";
 import { UilPrint, UilPlus } from "@iconscout/react-unicons";
 import { PageHeaders } from "@/components/page-headers";
-import { getTicket, updateTicket } from "@/functions/ticketing";
+import { getTicket, updateTicket, deleteTicket } from "@/functions/ticketing";
 import { Cards } from "@/components/cards/frame/cards-frame";
 const { TextArea } = Input;
 
@@ -34,6 +34,8 @@ const TicketDetail = () => {
   const [status, setStatus] = useState("");
   const [summary, setSummary] = useState("");
   const [submit, setSubmit] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -77,6 +79,35 @@ const TicketDetail = () => {
       string: "Please enter a valid ${label}!",
     },
     required: "This field is required.",
+  };
+
+  const handleDelete = () => {
+    setDeleteLoading(true);
+    deleteTicket(authtoken, id)
+      .then((res) => {
+        if (res.data.success) {
+          toast.success("Ticket deleted successfully!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+          router.push("/admin/ticketing");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to delete ticket.");
+      })
+      .finally(() => {
+        setDeleteLoading(false);
+        setIsDeleteModalVisible(false);
+      });
   };
   const PageRoutes = [
     {
@@ -343,6 +374,28 @@ const TicketDetail = () => {
               </Row>
             </div>
           )}
+          <div className="w-full flex justify-end">
+            <button
+              type="button"
+              className="py-2 px-4 rounded bg-red-600 text-white active:bg-red-800 hover:bg-red-700"
+              onClick={() => setIsDeleteModalVisible(true)}
+            >
+              Delete
+            </button>
+          </div>
+
+          <Modal
+            title="Confirm Delete"
+            open={isDeleteModalVisible}
+            onOk={handleDelete}
+            confirmLoading={deleteLoading}
+            onCancel={() => setIsDeleteModalVisible(false)}
+            okText="Delete"
+            cancelText="Cancel"
+            okButtonProps={{ danger: true }}
+          >
+            <p>Are you sure you want to delete this ticket?</p>
+          </Modal>
         </Cards>
       </>
     </div>
